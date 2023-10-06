@@ -20,25 +20,46 @@ public class Customer {
     }
 
     public String statement() {
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
+        return header() + body() + footer();
+    }
 
-        String result = "Rental Record for " + getName() + "\n";
-        for (Rental rental : rentals) {
-            double thisAmount = rental.amount();
-            frequentRenterPoints += rental.frequentRenterPoints();
-
-            //show figures for this rental
-            result += "\t" + rental.getMovie().getTitle() + "\t" +
-                    thisAmount + "\n";
-            totalAmount += thisAmount;
-        }
-
-        //add footer lines result
-        result += "Amount owed is " + totalAmount + "\n";
-        result += "You earned " + frequentRenterPoints
+    private String footer() {
+        double totalAmount = getTotalAmount();
+        int totalFrequentRenterPoints = getTotalFrequentRenterPoints();
+        String result = "Amount owed is " + totalAmount + "\n";
+        result += "You earned " + totalFrequentRenterPoints
                 + " frequent renter points";
         return result;
+    }
+
+    private String body() {
+        StringBuilder result = new StringBuilder();
+        for (Rental rental : rentals) {
+            result.append("\t").append(rental.getMovie().getTitle()).append("\t").append(rental.amount()).append("\n");
+        }
+        return result.toString();
+    }
+
+    private String header() {
+        return "Rental Record for " + getName() + "\n";
+    }
+
+    private int getTotalFrequentRenterPoints() {
+        int totalFrequentRenterPoints = 0;
+        for (Rental rental : rentals) {
+            int frequentRenterPoints = rental.frequentRenterPoints();
+            totalFrequentRenterPoints += frequentRenterPoints;
+        }
+        return totalFrequentRenterPoints;
+    }
+
+    private double getTotalAmount() {
+        double totalAmount = 0;
+        for (Rental rental : rentals) {
+            double thisAmount = rental.amount();
+            totalAmount += thisAmount;
+        }
+        return totalAmount;
     }
 }
 
