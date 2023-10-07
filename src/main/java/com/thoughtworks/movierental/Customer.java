@@ -20,53 +20,11 @@ public class Customer {
     }
 
     public String statement() {
-        return header() + body() + footer();
+        return new TextStatement(name, rentals, getTotalAmount(), getTotalFrequentRenterPoints()).generate();
     }
 
     public String htmlStatement() {
-        return htmlHeader() + htmlBody() + htmlFooter();
-    }
-
-    private String htmlHeader() {
-        return "<html>" + "<h1>" + "Rental Record for " + "<b>"  +getName() + "</b></h1>" + "</br>";
-    }
-
-    private String htmlBody() {
-        StringBuilder result = new StringBuilder();
-        for (Rental rental : rentals) {
-            result.append("<p>").append(rental.getMovie().getTitle()).append(" ").append(rental.amount()).append("</p></br>");
-        }
-        return result.toString();
-    }
-
-    private String htmlFooter() {
-        double totalAmount = getTotalAmount();
-        int totalFrequentRenterPoints = getTotalFrequentRenterPoints();
-        String result = "Amount owed is " + "<b>" + totalAmount + "</b>" + "</br>";
-        result += "You earned " + "<b>" +  totalFrequentRenterPoints + "</b>"
-                + " frequent renter points" + "</html>";
-        return result;
-    }
-
-    private String footer() {
-        double totalAmount = getTotalAmount();
-        int totalFrequentRenterPoints = getTotalFrequentRenterPoints();
-        String result = "Amount owed is " + totalAmount + "\n";
-        result += "You earned " + totalFrequentRenterPoints
-                + " frequent renter points";
-        return result;
-    }
-
-    private String body() {
-        StringBuilder result = new StringBuilder();
-        for (Rental rental : rentals) {
-            result.append("\t").append(rental.getMovie().getTitle()).append("\t").append(rental.amount()).append("\n");
-        }
-        return result.toString();
-    }
-
-    private String header() {
-        return "Rental Record for " + getName() + "\n";
+        return new HtmlStatement(getTotalAmount(), getTotalFrequentRenterPoints(), name, rentals).generate();
     }
 
     private int getTotalFrequentRenterPoints() {
@@ -86,6 +44,7 @@ public class Customer {
         }
         return totalAmount;
     }
+
 }
 
 // HTML Story
