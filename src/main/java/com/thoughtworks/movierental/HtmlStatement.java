@@ -7,13 +7,23 @@ class HtmlStatement {
     private final double totalAmount;
     private final int totalFrequentRenterPoints;
     private final String name;
-    private final List<Rental> rentals;
+    private final List<Rental> rentalList;
+//    private final Rentals rentals;
 
+    @Deprecated
     public HtmlStatement(double totalAmount, int totalFrequentRenterPoints, String name, List<Rental> rentals) {
         this.totalAmount = totalAmount;
         this.totalFrequentRenterPoints = totalFrequentRenterPoints;
         this.name = name;
-        this.rentals = rentals;
+        this.rentalList = rentals;
+    }
+
+    public HtmlStatement(String name, Rentals rentals) {
+        this.name = name;
+//        this.rentals = rentals;
+        this.totalAmount = rentals.getTotalAmount();
+        this.totalFrequentRenterPoints = rentals.getTotalFrequentRenterPoints();
+        this.rentalList = rentals;
     }
 
     public String generate() {
@@ -26,7 +36,7 @@ class HtmlStatement {
 
     private String htmlBody() {
         StringBuilder result = new StringBuilder();
-        for (Rental rental : rentals) {
+        for (Rental rental : rentalList) {
             result.append("<p>").append(rental.getMovie().getTitle()).append(" ").append(rental.amount()).append("</p></br>");
         }
         return result.toString();
